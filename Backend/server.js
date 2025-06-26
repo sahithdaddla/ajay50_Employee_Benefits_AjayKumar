@@ -8,14 +8,32 @@ const fs = require('fs');
 const app = express();
 const port = process.env.PORT || 3422;
 
-// PostgreSQL connection
-const pool = new Pool({
+// PostgreSQL connection with retry logic
+const poolConfig = {
   user: process.env.DB_USER || 'postgres',
   host: process.env.DB_HOST || 'postgres',
   database: process.env.DB_NAME || 'new_employee_db',
   password: process.env.DB_PASSWORD || 'admin123',
   port: process.env.DB_PORT || 5432,
-});
+};
+
+const createPoolWithRetry = () => {
+  const pool = new Pool(poolConfig);
+  
+  // Test the connection
+  pool.query('SELECT 1')
+    .then(() => console.log('Connected to PostgreSQL'))
+    .catch(async (err) => {
+      console.error('Failed to connect to PostgreSQL:', err.message);
+      console.log('Retrying in 5 seconds...');
+      await new Promise(resolve => setTimeout(resolve, 5000));
+      return createPoolWithRetry();
+    });
+  
+  return pool;
+};
+
+const pool = createPoolWithRetry();
 
 // Multer setup for file uploads
 const storage = multer.diskStorage({
@@ -24,7 +42,7 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + path.extname(file.originalName));
+    cb(null, uniqueSuffix + path.extname(file.originalname));
   },
 });
 
@@ -37,11 +55,11 @@ const upload = multer({
   storage,
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
   fileFilter: (req, file, cb) => {
-    if (!file || !file.originalName) {
+    if (!file) {
       return cb(null, true);
     }
     const filetypes = /pdf|jpg|jpeg|png/;
-    const extname = filetypes.test(path.extname(file.originalName).toLowerCase());
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
     const mimetype = filetypes.test(file.mimetype);
     if (extname && mimetype) {
       return cb(null, true);
@@ -77,7 +95,7 @@ app.get('/download/:filename', (req, res) => {
   // Normalize filename to handle both forward and backslashes
   filename = filename.replace(/\\/g, '/').split('/').pop();
   const filePath = path.join(__dirname, 'Uploads', filename);
-  console.log('Requested file path:', filePath); // Debug log
+  console.log('Requested file path:', filePath);
 
   fs.access(filePath, fs.constants.F_OK, (err) => {
     if (err) {
@@ -221,4 +239,9 @@ app.get('/hr', (req, res) => {
 // Start server
 app.listen(port, () => {
   console.log(`Server running on http://44.223.23.145:${port}`);
+});
+
+process.on('SIGINT', () => {
+  pool.end();
+  process.exit();
 });
