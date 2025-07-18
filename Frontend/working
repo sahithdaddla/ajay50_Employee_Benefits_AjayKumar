@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,7 +13,7 @@
             --primary-dark: #553c9a;
             --secondary: #4c68d7;
             --success: #38a169;
-            --warning: #f1c40f;
+            --warning: #d69e2e;
             --danger: #e53e3e;
             --light: #f8fafc;
             --dark: #2d3748;
@@ -48,7 +47,7 @@
         }
 
         header {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            background: linear-gradient(135deg, #5f1aff, #b74cd7);
             color: white;
             text-align: center;
             padding: 20px;
@@ -246,7 +245,7 @@
         }
 
         .status-pending {
-            background-color: rgba(241, 196, 15, 0.2);
+            background-color: rgba(214, 158, 46, 0.1);
             color: var(--warning);
         }
 
@@ -347,16 +346,6 @@
             background: var(--gray-light);
             color: var(--gray);
             cursor: not-allowed;
-        }
-
-        .btn-secondary {
-            background: var(--gray-light);
-            color: var(--dark);
-        }
-
-        .btn-secondary:hover:not(:disabled) {
-            background: var(--gray);
-            color: white;
         }
 
         .activities-section {
@@ -747,7 +736,7 @@
         <section class="form-section">
             <div class="request-form">
                 <h2 class="section-title">Request Benefit</h2>
-                <div id="request-form">
+                <form id="request-form">
                     <div class="form-group">
                         <label for="emp-id">Employee ID</label>
                         <input type="text" id="emp-id" class="form-control" placeholder="ATS0xxx" required minlength="7" maxlength="7">
@@ -756,14 +745,14 @@
                     
                     <div class="form-group">
                         <label for="name">Full Name</label>
-                        <input type="text" id="name" class="form-control" placeholder="Employee Name" minlength="3" maxlength="50" required>
-                        <div class="error-message" id="name-error">Please enter a valid name min 3-50 characters (letters and spaces only)</div>
+                        <input type="text" id="name" class="form-control" placeholder="Employee Name" required>
+                        <div class="error-message" id="name-error">Please enter a valid name (letters and spaces only)</div>
                     </div>
                     
                     <div class="form-group">
                         <label for="email">Email</label>
                         <input type="email" id="email" class="form-control" placeholder="Employee email" required>
-                        <div class="error-message" id="email-error">Email must be 3-50 characters before @astrolitetech.com, no special characters</div>
+                        <div class="error-message" id="email-error">Email must be 3-50 characters before @gmail.com, no special characters</div>
                     </div>
                     
                     <div class="form-group">
@@ -822,10 +811,10 @@
                         </div>
                     </div>
                     
-                    <button type="button" class="btn btn-primary" id="submit-btn" onclick="app.confirmSubmit()">
+                    <button type="submit" class="btn btn-primary" id="submit-btn">
                         <i class="fas fa-paper-plane"></i> Submit Request
                     </button>
-                </div>
+                </form>
             </div>
         </section>
     </div>
@@ -863,32 +852,32 @@
             
             <div class="modal-info">
                 <label>Employee Name</label>
-                <div id="detail-name" class="modal-info-content">-</div>
+                <span id="detail-name">-</span>
             </div>
             
             <div class="modal-info">
                 <label>Employee ID</label>
-                <div id="detail-emp-id" class="modal-info-content">-</div>
+                <span id="detail-emp-id">-</span>
             </div>
             
             <div class="modal-info">
                 <label>Benefit Program</label>
-                <div id="detail-program" class="modal-info-content">-</div>
+                <span id="detail-program">-</span>
             </div>
             
             <div class="modal-info">
                 <label>Request Date</label>
-                <div id="detail-date" class="modal-info-content">-</div>
+                <span id="detail-date">-</span>
             </div>
             
             <div class="modal-info">
                 <label>Status</label>
-                <div id="detail-status" class="modal-info-content status-badge">-</div>
+                <span id="detail-status">-</span>
             </div>
             
             <div class="modal-info">
                 <label>Reason</label>
-                <div id="detail-reason" class="modal-info-content">Not specified</div>
+                <span id="detail-reason">Not specified</span>
             </div>
             
             <div id="loan-details" style="display: none;">
@@ -896,43 +885,23 @@
                 
                 <div class="modal-info">
                     <label>Loan Amount</label>
-                    <div id="detail-loan-amount" class="modal-info-content">-</div>
+                    <span id="detail-loan-amount">-</span>
                 </div>
                 
                 <div class="modal-info">
                     <label>Loan Purpose</label>
-                    <div id="detail-loan-purpose" class="modal-info-content">-</div>
+                    <span id="detail-loan-purpose">-</span>
                 </div>
                 
                 <div class="modal-info">
                     <label>Documents</label>
-                    <div id="detail-loan-docs" class="modal-info-content">No documents uploaded</div>
+                    <span id="detail-loan-docs">No documents uploaded</span>
                 </div>
             </div>
             
             <div class="modal-buttons">
                 <button class="btn close-btn" onclick="closeModal()">
                     <i class="fas fa-times"></i> Close
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal" id="confirm-modal" role="dialog" aria-labelledby="confirm-modal-title">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="confirm-modal-title">Confirm Submission</h2>
-                <button class="close-modal" onclick="app.closeConfirmModal()">×</button>
-            </div>
-            <div class="modal-info">
-                <p>Are you sure you want to submit this request?</p>
-            </div>
-            <div class="modal-buttons">
-                <button class="btn btn-secondary" onclick="app.closeConfirmModal()">
-                    <i class="fas fa-times"></i> Cancel
-                </button>
-                <button class="btn btn-primary" onclick="app.submitRequest()">
-                    <i class="fas fa-check"></i> Confirm
                 </button>
             </div>
         </div>
@@ -968,6 +937,11 @@
                     loanOptions.style.display = this.program.value === 'Employee Loans' ? 'block' : 'none';
                 });
                 
+                document.getElementById('request-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.submitRequest();
+                });
+                
                 document.getElementById('emp-id').addEventListener('blur', () => {
                     if (this.validateEmpId(this.empId.value.trim())) {
                         this.loadEmployeeRequests(this.empId.value.trim());
@@ -995,17 +969,15 @@
                 });
                 
                 this.name.addEventListener('input', () => {
-    const value = this.name.value.trim();
-    const isValid = /^[A-Za-z\s]{3,50}$/.test(value); // At least 3 characters, only letters/spaces
-    this.toggleError('name-error', !isValid);
-    this.name.setCustomValidity(isValid ? '' : 'Name must be at least 3 letters and contain only alphabets and spaces');
-});
-
+                    const isValid = /^[A-Za-z\s]+$/.test(this.name.value.trim());
+                    this.toggleError('name-error', !isValid);
+                    this.name.setCustomValidity(isValid ? '' : 'Invalid name format');
+                });
                 
                 this.email.addEventListener('input', () => {
-                    const isValid = /^[a-zA-Z0-9._-]{3,50}@astrolitetech\.com$/.test(this.email.value.trim());
+                    const isValid = /^[a-zA-Z0-9._-]{3,50}@gmail\.com$/.test(this.email.value.trim());
                     this.toggleError('email-error', !isValid);
-                    this.email.setCustomValidity(isValid ? '' : 'Email must be 3-50 characters before @astrolitetech.com, no special characters');
+                    this.email.setCustomValidity(isValid ? '' : 'Email must be 3-50 characters before @gmail.com, no special characters');
                 });
                 
                 this.requestDate.addEventListener('change', () => {
@@ -1180,7 +1152,7 @@
                 
                 const statusElement = document.getElementById('detail-status');
                 statusElement.textContent = request.status;
-                statusElement.className = `modal-info-content status-badge status-${request.status.toLowerCase()}`;
+                statusElement.className = `status-badge status-${request.status.toLowerCase()}`;
                 
                 document.getElementById('detail-reason').textContent = request.reason || 'Not specified';
                 
@@ -1211,10 +1183,6 @@
             
             closeModal() {
                 document.getElementById('details-modal').style.display = 'none';
-            }
-            
-            closeConfirmModal() {
-                document.getElementById('confirm-modal').style.display = 'none';
             }
             
             showAlert(message, type = 'success') {
@@ -1248,46 +1216,7 @@
                 }, 3000);
             }
             
-            confirmSubmit() {
-                const nameValid = /^[A-Za-z\s]+$/.test(this.name.value.trim());
-                const emailValid = /^[a-zA-Z0-9._-]{3,50}@astrolitetech\.com$/.test(this.email.value.trim());
-                const empIdValid = this.validateEmpId(this.empId.value.trim());
-                const programValid = this.program.value !== '';
-                const selectedDate = new Date(this.requestDate.value);
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-                const sixMonthsLater = new Date();
-                sixMonthsLater.setMonth(today.getMonth() + 6);
-                const dateValid = selectedDate >= today && selectedDate <= sixMonthsLater;
-                const reasonValid = this.reason.value.trim() === '' || (this.reason.value.trim() === this.reason.value && !/\s{2,}/.test(this.reason.value));
-                let loanAmountValid = true;
-                let loanPurposeValid = true;
-                let loanDocsValid = true;
-                
-                if (this.program.value === 'Employee Loans') {
-                    const amount = parseFloat(this.loanAmount.value);
-                    loanAmountValid = !isNaN(amount) && amount >= 10000 && amount <= 1000000;
-                    loanPurposeValid = this.loanPurpose.value !== '';
-                    loanDocsValid = !this.loanDocs.files[0] || (/\.(pdf|jpg|jpeg|png)$/i.test(this.loanDocs.files[0].name) && this.loanDocs.files[0].size <= 5 * 1024 * 1024);
-                    this.toggleError('loan-amount-error', !loanAmountValid);
-                    this.toggleError('loan-docs-error', !loanDocsValid);
-                }
-                
-                this.toggleError('name-error', !nameValid);
-                this.toggleError('email-error', !emailValid);
-                this.toggleError('emp-id-error', !empIdValid);
-                this.toggleError('date-error', !dateValid);
-                this.toggleError('reason-error', !reasonValid);
-                
-                if (!nameValid || !emailValid || !empIdValid || !programValid || !dateValid || !reasonValid || !loanAmountValid || !loanPurposeValid || !loanDocsValid) {
-                    return;
-                }
-                
-                document.getElementById('confirm-modal').style.display = 'flex';
-            }
-            
             async submitRequest() {
-                this.closeConfirmModal();
                 this.submitBtn.disabled = true;
                 this.submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
                 
@@ -1300,6 +1229,42 @@
                 const loanAmount = this.loanAmount?.value;
                 const loanPurpose = this.loanPurpose?.value;
                 const loanDocs = this.loanDocs?.files[0];
+                
+                const nameValid = /^[A-Za-z\s]+$/.test(name);
+                const emailValid = /^[a-zA-Z0-9._-]{3,50}@gmail\.com$/.test(email);
+                const empIdValid = this.validateEmpId(empId);
+                const programValid = program !== '';
+                const selectedDate = new Date(date);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const sixMonthsLater = new Date();
+                sixMonthsLater.setMonth(today.getMonth() + 6);
+                const dateValid = date && selectedDate >= today && selectedDate <= sixMonthsLater;
+                const reasonValid = reason === '' || (reason.trim() === reason && !/\s{2,}/.test(reason));
+                let loanAmountValid = true;
+                let loanPurposeValid = true;
+                let loanDocsValid = true;
+                
+                if (program === 'Employee Loans') {
+                    const amount = parseFloat(loanAmount);
+                    loanAmountValid = !isNaN(amount) && amount >= 10000 && amount <= 1000000;
+                    loanPurposeValid = loanPurpose !== '';
+                    loanDocsValid = !loanDocs || (/\.(pdf|jpg|jpeg|png)$/i.test(loanDocs.name) && loanDocs.size <= 5 * 1024 * 1024);
+                    this.toggleError('loan-amount-error', !loanAmountValid);
+                    this.toggleError('loan-docs-error', !loanDocsValid);
+                }
+                
+                this.toggleError('name-error', !nameValid);
+                this.toggleError('email-error', !emailValid);
+                this.toggleError('emp-id-error', !empIdValid);
+                this.toggleError('date-error', !dateValid);
+                this.toggleError('reason-error', !reasonValid);
+                
+                if (!nameValid || !emailValid || !empIdValid || !programValid || !dateValid || !reasonValid || !loanAmountValid || !loanPurposeValid || !loanDocsValid) {
+                    this.submitBtn.disabled = false;
+                    this.submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Request';
+                    return;
+                }
                 
                 const oneTimePrograms = ['Yoga and Meditation', 'Mental Health Support', 'Awareness Programs', 'Health Checkup Camps', 'Gym Membership'];
                 if (oneTimePrograms.includes(program)) {
@@ -1340,20 +1305,26 @@
                     });
                     
                     if (response.ok) {
+                        const result = await response.json();
                         this.showAlert('🎉 Request submitted successfully!');
-                        window.location.reload();
+                        this.loadEmployeeRequests(empId);
+                        this.requestForm.reset();
+                        document.getElementById('loan-options').style.display = 'none';
+                        document.getElementById('file-name').style.display = 'none';
+                        
+                        const today = new Date();
+                        this.requestDate.value = this.formatDateForInput(today);
                     } else {
                         const error = await response.json();
                         this.showAlert(error.error || 'Error submitting request', 'error');
-                        this.submitBtn.disabled = false;
-                        this.submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Request';
                     }
                 } catch (e) {
                     console.error('Error:', e);
                     this.showAlert('Error connecting to server. Please try again.', 'error');
-                    this.submitBtn.disabled = false;
-                    this.submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Request';
                 }
+                
+                this.submitBtn.disabled = false;
+                this.submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Request';
             }
             
             get requestForm() {
