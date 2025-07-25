@@ -38,7 +38,7 @@ services:
       DB_PASSWORD: admin123
       DB_PORT: 5432
       PORT: 3422
-      FRONTEND_URL: http://44.223.23.145:8043
+      FRONTEND_URL: http://13.60.63.74:8043
     volumes:
       - ./Backend/Uploads:/app/Uploads  # Persistent storage for uploads
 
